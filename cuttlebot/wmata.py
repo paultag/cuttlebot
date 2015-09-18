@@ -6,6 +6,9 @@ import aiowmata.rail
 @at_bot
 @asyncio.coroutine
 def wmata(bot, message: "message"):
+    text = message.get('text', '').lower()
+    if 'wmata' not in text and ':metro:' not in text:
+        return
 
     def prediction_to_string(prediction):
         eta = prediction['Min'].strip()
@@ -18,10 +21,6 @@ def wmata(bot, message: "message"):
 
         return ("{Car} car train to {DestinationName} arrriving to "
                 "{LocationName} {eta} (on track {Group})".format(eta=eta, **prediction))
-
-    text = message.get('text', '').lower()
-    if 'wmata' not in text:
-        return
 
     predictions = yield from aiowmata.rail.get_predictions("B35")
 
