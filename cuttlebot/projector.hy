@@ -24,8 +24,8 @@
       [power (Power s)]]
   (defn/async projector [bot message &rest args]
     (ap-switch (first args)
-          [(= it 'on)  (print/bot (power.on))]
-          [(= it 'off) (print/bot (power.off))]
+          [(= it 'on)     (print/bot (power.on))]
+          [(= it 'off)    (print/bot (power.off))]
           [(= it 'status) (print/bot (power.status))]
-          [true (print/bot "unknown subcommand")]))
+          [true           (print/bot "unknown subcommand")]))
   (commands.register "projector" projector))
