@@ -1,15 +1,11 @@
-from butterfield.utils import at_bot
 import asyncio
 import aiowmata.rail
 
+from .command import commands
 
-@at_bot
+
 @asyncio.coroutine
 def wmata(bot, message: "message"):
-    text = message.get('text', '').lower()
-    if 'wmata' not in text and ':metro:' not in text:
-        return
-
     def prediction_to_string(prediction):
         eta = prediction['Min'].strip()
         if eta == "BRD":
@@ -20,11 +16,17 @@ def wmata(bot, message: "message"):
             eta = "in " + eta + " minutes"
 
         return ("{Car} car train to {DestinationName} arrriving to "
-                "{LocationName} {eta} (on track {Group})".format(eta=eta, **prediction))
+                "{LocationName} {eta} (on track {Group})".format(
+                    eta=eta, **prediction))
 
     predictions = yield from aiowmata.rail.get_predictions("B35")
 
     yield from bot.post(
         message['channel'],
-        "\n".join((prediction_to_string(x) for x in sorted(predictions['Trains'], key=lambda x: x['Group']))),
-    )
+        "\n".join((prediction_to_string(x) for x in
+                   sorted(predictions['Trains'],
+                          key=lambda x: x['Group']))))
+
+
+commands.register("wmata", wmata)
+commands.register(":metro:", wmata)
