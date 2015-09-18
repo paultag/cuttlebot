@@ -1,2 +1,2 @@
-butterfield
-aiowmata
+-e git+https://github.com/jcarbaugh/butterfield#egg=butterfield
+-e git+https://github.com/paultag/aiowmata#egg=aiowmata
