@@ -16,4 +16,4 @@
        (cond ~@checks)))
 
 (defmacro print/bot [message]
-  `(yield-from (bot.post (get message "channel") ~message)))
+  `(yield-from (bot.post (get message "channel") (repr ~message))))
