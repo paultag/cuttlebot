@@ -1,5 +1,6 @@
 (import
-  [PJD5132.api [Power Volume Mute]]
+  [PJD5132.api [*]]
+  [PJD5132.commands [*command-map* *command-types*]]
   asyncio
   serial)
 
@@ -10,16 +11,17 @@
            :bytesize serial.EIGHTBITS
            :parity   serial.PARITY_NONE
            :stopbits serial.STOPBITS_ONE
-           :baudrate 115200)]
-      [power (Power s)]
-      [mute  (Mute s)]]
+           :baudrate 115200)]]
+
   (defn/command projector [bot message &rest args]
-    (ap-switch (first args)
-          [(= it 'mute)   (print/bot (mute.on))]
-          [(= it 'unmute) (print/bot (mute.off))]
+    (setv method (ap-switch (first args)
 
-          [(= it 'on)     (print/bot (power.on))]
-          [(= it 'off)    (print/bot (power.off))]
+      [(= it 'mute)   mute]
+      [(= it 'unmute) unmute]
+      [(= it 'on)     power-on]
+      [(= it 'off)    power-off]
+      [(= it 'status) power-status]))
 
-          [(= it 'status) (print/bot (power.status))]
-          [true           (print/bot "unknown subcommand")])))
+    (if (= method 'nil)
+      (print/bot "No such method")
+      (print/bot (repr (method s))))))
