@@ -15,5 +15,8 @@
   `(do (setv it ~expr)
        (cond ~@checks)))
 
+(defmacro print/chan [chan message]
+  `(yield-from (bot.post ~chan (repr ~message))))
+
 (defmacro print/bot [message]
-  `(yield-from (bot.post (get message "channel") (repr ~message))))
+  `(print/chan (get message "channel") ~message))

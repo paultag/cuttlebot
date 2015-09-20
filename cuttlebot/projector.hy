@@ -24,4 +24,5 @@
 
     (if (= method 'nil)
       (print/bot "No such method")
-      (print/bot (repr (method s))))))
+      (do (print/chan "#projector" #L"Doing: {method}")
+          (print/bot (repr (method s)))))))
